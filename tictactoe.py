@@ -1,16 +1,3 @@
-"""Before your interview, write a program that lets two humans play a game of Tic Tac Toe in a terminal.
-The program should let the players take turns to input their moves. The program should report the outcome of the game.
-
-During your interview, you will pair on adding support for a computer player to your game. You can start
- with random moves and make the AI smarter if you have time.
- 0,0  0,1  0,2 
- 1,0  1,1  1,2 
- 2,0  2,1  2,2 
- 
-
-
- 
- """
 
 #checks the board to see if anyone has won, or if there is a draw. 
 def threeInARow(row1, col1, row2, col2, row3, col3, board):
@@ -22,19 +9,15 @@ def threeInARow(row1, col1, row2, col2, row3, col3, board):
 def didAnyoneWin(board):
   for i in range(0, 3):
     possibleWin = threeInARow(i,0,i,1,i,2,board)
-    print(possibleWin)
     if possibleWin:
       return possibleWin
     possibleWin = threeInARow(0,i,1,i,2,i,board)
-    print(possibleWin)
     if possibleWin:
       return possibleWin
   diagonal1 = threeInARow(0,0,1,1,2,2,board)
-  print(diagonal1)
   if diagonal1:
     return diagonal1
   diagonal2 = threeInARow(2,0,1,1,0,2,board)
-  print(diagonal2)
   if diagonal2:
     return diagonal2
   return 0
@@ -50,6 +33,20 @@ def validateMove(board, row, col, turn):
     return False
   return True
 
+def printBoard(board):
+  for row in board:
+    toPrint = "|"
+    for i in range(0,3):
+      if row[i] == 1:
+        toPrint+="X|"
+      elif row[i] == -1:
+        toPrint+="O|"
+      else:
+        toPrint+=" |"
+    print(toPrint)
+    
+  
+
 def gameloop(board, winner, turn):
     validMove = False
     while not validMove:
@@ -59,9 +56,8 @@ def gameloop(board, winner, turn):
         validMove = validateMove(board, row, col, turn)
       except ValueError:
         print("you entered something other than an int. Don't do that!")
-    print("made it out of while loop")
     board[row][col] = turn
-    print(board)
+    printBoard(board)
     winner = didAnyoneWin(board)
     return (board, winner, (turn*-1))
 
@@ -79,7 +75,7 @@ def main():
     elif winner==-1:
         print("THIS GAME'S WINNER IS: PLAYER TWO!")
     else:
-        print("NO CONTEST!")
+        print("IT'S A DRAW! AND WHAT A LOVELY DRAW IT IS!")
     return
 
 
