@@ -2,10 +2,41 @@
 The program should let the players take turns to input their moves. The program should report the outcome of the game.
 
 During your interview, you will pair on adding support for a computer player to your game. You can start
- with random moves and make the AI smarter if you have time."""
+ with random moves and make the AI smarter if you have time.
+ 0,0  0,1  0,2 
+ 1,0  1,1  1,2 
+ 2,0  2,1  2,2 
+ 
+
+
+ 
+ """
 
 #checks the board to see if anyone has won, or if there is a draw. 
+def threeInARow(row1, col1, row2, col2, row3, col3, board):
+  if board[row1][col1] == board[row2][col2]==board[row3][col3] !=0:
+    return board[row1][col1]
+  return 0
+  
+  
 def didAnyoneWin(board):
+  for i in range(0, 3):
+    possibleWin = threeInARow(i,0,i,1,i,2,board)
+    print(possibleWin)
+    if possibleWin:
+      return possibleWin
+    possibleWin = threeInARow(0,i,1,i,2,i,board)
+    print(possibleWin)
+    if possibleWin:
+      return possibleWin
+  diagonal1 = threeInARow(0,0,1,1,2,2,board)
+  print(diagonal1)
+  if diagonal1:
+    return diagonal1
+  diagonal2 = threeInARow(2,0,1,1,0,2,board)
+  print(diagonal2)
+  if diagonal2:
+    return diagonal2
   return 0
 
 def validateMove(board, row, col, turn):
@@ -37,16 +68,18 @@ def gameloop(board, winner, turn):
 
 def main():
     board = [[0,0,0],[0,0,0],[0,0,0]]
-    winner = 0 #If player 1 wins, winner=1. If player 2 wins, winner=2, if draw, winner=-1, if not yet finished, winner=0
+    winner = 0 #If player 1 wins, winner=1. If player 2 wins, winner=-1 (confusing, I know), if not yet finished, winner=0. If the numTurns counter reaches 9 without anyone winning, then we have a draw.
+    numTurns = 0
     turn = 1 #turn = 1 for player 1's turn. turn=-1 for player 2's turn
-    while(winner==0):
+    while(winner==0 and numTurns < 9):
         (board, winner, turn) = gameloop(board, winner, turn)
+        numTurns+=1 
     if winner==1:
-        print("A WINNER IS PLAYER WON")
-    elif winner==2:
-        print("A WINNER IS PLAYER TOO")
+        print("THIS GAME'S WINNER IS: PLAYER ONE!")
     elif winner==-1:
-        print("YOU'RE A GOOD DRAWER")
+        print("THIS GAME'S WINNER IS: PLAYER TWO!")
+    else:
+        print("NO CONTEST!")
     return
 
 
