@@ -1,3 +1,5 @@
+import random 
+
 
 #checks the board to see if anyone has won, or if there is a draw. 
 def threeInARow(row1, col1, row2, col2, row3, col3, board):
@@ -22,11 +24,15 @@ def didAnyoneWin(board):
     return diagonal2
   return 0
 
-def validateMove(board, row, col, turn):
-  if row < 0 or row > 2 or col < 0 or col > 2:
+def validateMove(board, row, col):
+  validStrings = [str(x) for x in range(len(board))]  
+  if row not in validStrings or col not in validStrings: 
+  #if row < 0 or row > 2 or col < 0 or col > 2:
     print("Those coordinates don't correspond to a space in the board")
     print("that was not a valid move. try again")
     return False
+  row = int(row)
+  col = int(col)
   if board[row][col] != 0:
     print("That space is already full")
     print("that was not a valid move. try again")
@@ -45,17 +51,37 @@ def printBoard(board):
         toPrint+=" |"
     print(toPrint)
     
-  
+def humanTurn(board):
+  validMove = False
+  while not validMove:
+      row = input("enter the row (0 = top, 1 = mid, 2 = bottom)")
+      col = input("enter the col (0 = left, 1 = mid, 2 = right)")
+      validMove = validateMove(board, row, col)
+  return (int(row), int(col))
+
+
+def aiTurn(board):
+  validMove = False 
+  while not validMove:
+    row = random.randrange(0, 3)
+    col = random.randrange(0, 3)
+    if board[row][col]==0: validMove = True
+  return (row, col)
 
 def gameloop(board, winner, turn):
-    validMove = False
-    while not validMove:
-      try:
-        row = int(input("enter the row (0 = top, 1 = mid, 2 = bottom)"))
-        col = int(input("enter the col (0 = left, 1 = mid, 2 = right)"))
-        validMove = validateMove(board, row, col, turn)
-      except ValueError:
-        print("you entered something other than an int. Don't do that!")
+    if turn == -1:
+      (row, col) = aiTurn(board)
+    else:
+      """
+      validMove = False
+      while not validMove:
+        try:
+          row = int(input("enter the row (0 = top, 1 = mid, 2 = bottom)"))
+          col = int(input("enter the col (0 = left, 1 = mid, 2 = right)"))
+          validMove = validateMove(board, row, col, turn)
+        except ValueError:
+          print("you entered something other than an int. Don't do that!")"""
+      (row,col)=humanTurn(board)
     board[row][col] = turn
     printBoard(board)
     winner = didAnyoneWin(board)
