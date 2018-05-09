@@ -7,6 +7,30 @@ def threeInARow(row1, col1, row2, col2, row3, col3, board):
     return board[row1][col1]
   return 0
   
+def aboutToWin(row1, col1, row2, col2, row3, col3, board):  
+  if abs(board[row1][col1] + board[row2][col2] + board[row3][col3]) == 2:
+    spaces = [(row1, col1), (row2, col2), (row3, col3)]
+    for i in spaces:
+      if board[i[0]][i[1]] == 0:
+        return i
+  return 0
+  
+  
+def isSomeoneAboutToWin(board):
+  for i in range(0, 3):
+    possibleWin = aboutToWin(i,0,i,1,i,2,board)
+    if possibleWin:
+      return possibleWin
+    possibleWin = aboutToWin(0,i,1,i,2,i,board)
+    if possibleWin:
+      return possibleWin
+  diagonal1 = aboutToWin(0,0,1,1,2,2,board)
+  if diagonal1:
+    return diagonal1
+  diagonal2 = aboutToWin(2,0,1,1,0,2,board)
+  if diagonal2:
+    return diagonal2
+  return 0
   
 def didAnyoneWin(board):
   for i in range(0, 3):
@@ -61,6 +85,8 @@ def humanTurn(board):
 
 
 def aiTurn(board):
+  move = isSomeoneAboutToWin(board)
+  if move: return move 
   validMove = False 
   while not validMove:
     row = random.randrange(0, 3)
